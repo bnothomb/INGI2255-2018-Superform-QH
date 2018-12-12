@@ -24,8 +24,8 @@ install:
 before_script: 
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz
   - tar -xf geckodriver-v0.23.0-linux64.tar.gz
-  - ls -al
-  - export PATH=$PATH:$HOME/geckodriver
+  - pwd
+  - export PATH=$PATH:/home/travis/build/bnothomb/INGI2255-2018-Superform-QH/geckodriver
   - echo $PATH
   # configure ictv
   - cd superform/
