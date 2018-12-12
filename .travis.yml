@@ -24,7 +24,9 @@ install:
 before_script: 
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz
   - tar -xf geckodriver-v0.23.0-linux64.tar.gz
+  - ls -al
   - export PATH=$PATH:$HOME/geckodriver
+  - echo $PATH
   # configure ictv
   - cd superform/
   - cat superform/tests/ictv-server/hack1.py >> /home/travis/virtualenv/python3.6.3/lib/python3.6/site-packages/ictv/pages/channel_page.py
