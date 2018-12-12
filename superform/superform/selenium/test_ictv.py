@@ -16,7 +16,7 @@ post_publication_until = datetime.date.today() + datetime.timedelta(1)
 
 
 def test_selenium_open_superform(driver):
-    driver.get("http://127.0.0.1:5000")
+    driver.get("http://localhost:5000")
     assert "Superform" in driver.title
 
 
@@ -140,11 +140,11 @@ def test_selenium_logout(driver):
 
 driver = webdriver.Firefox()
 test_selenium_open_superform(driver)
-test_selenium_auth(driver)
+"""test_selenium_auth(driver)
 test_selenium_new_ictv_channel(driver)
 test_selenium_conf_ictv_channel(driver)
 test_selenium_add_moderator(driver)
 test_selenium_new_post(driver)
 test_selenium_delete_channel(driver)
-test_selenium_logout(driver)
+test_selenium_logout(driver)"""
 driver.close()
