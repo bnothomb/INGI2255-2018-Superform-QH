@@ -3,6 +3,8 @@ import time
 
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 channel_name = "A-beautiful-channel-name"
 channel_server_fqdn = "0.0.0.0:8000"
@@ -20,25 +22,35 @@ waiting_delay = 1
 
 
 def test_selenium_open_superform(driver):
-    driver.get("http://127.0.0.1:5000")
+    driver.get("http://localhost:5000")
+    time.sleep(waiting_delay)
     assert "Superform" in driver.title
 
 
 def test_selenium_auth(driver):
     login_link = driver.find_element_by_link_text('Login')
     assert login_link
+    time.sleep(waiting_delay)
     login_link.click()
     assert "TestShib Identity Provider Login" in driver.title
     username_field = driver.find_element_by_name("j_username")
-    username_field.send_keys("myself")
+    username_field.send_keys("superego")
     time.sleep(comfort_delay)
     password_field = driver.find_element_by_name("j_password")
-    password_field.send_keys("myself")
+    password_field.send_keys("superego")
     time.sleep(comfort_delay)
     submit_button = driver.find_element_by_xpath("//input[@value='Login']")
     submit_button.click()
     time.sleep(waiting_delay)
-    assert "Index - Superform" in driver.title
+
+    try:
+        WebDriverWait(driver, 5).until(EC.alert_is_present())
+        alert = driver.switch_to.alert
+        alert.accept()
+        driver.switch_to.default_content
+        WebDriverWait(driver, 5).until(EC.title_contains('Index'))
+    finally:
+        assert "Index - Superform" in driver.title
 
 
 def test_selenium_new_ictv_channel(driver):
@@ -99,7 +111,7 @@ def test_selenium_add_moderator(driver):
     username_field = username_fields[-1]
     assert username_field
     username_field.clear()
-    username_field.send_keys("myself")
+    username_field.send_keys("superego")
     time.sleep(comfort_delay)
     auth_select = Select(driver.find_elements_by_xpath("//select[@id='sel1']")[-1])
     assert auth_select
@@ -115,14 +127,14 @@ def test_selenium_add_moderator(driver):
     time.sleep(comfort_delay)
 
 
-def test_selenium_new_post_ictv(driver):
+def test_selenium_new_post_ictv(driver, i):
     new_link = driver.find_element_by_link_text('New post')
     assert new_link
     new_link.click()
     time.sleep(waiting_delay)
     title_field = driver.find_element_by_xpath("//input[@id='titlepost']")
     assert title_field
-    title_field.send_keys(post_title)
+    title_field.send_keys(post_title+'-'+ i)
     time.sleep(comfort_delay)
     description_field = driver.find_element_by_xpath("//textarea[@id='descriptionpost']")
     assert description_field
@@ -199,7 +211,7 @@ def test_selenium_delete_channel(driver):
 
 
 def test_selenium_logout(driver):
-    user_link = driver.find_element_by_link_text('Me Myself And I')
+    user_link = driver.find_element_by_link_text('Super Ego')
     assert user_link
     user_link.click()
     time.sleep(comfort_delay)
@@ -216,7 +228,9 @@ test_selenium_auth(driver)
 test_selenium_new_ictv_channel(driver)
 test_selenium_conf_ictv_channel(driver)
 test_selenium_add_moderator(driver)
-test_selenium_new_post_ictv(driver)
+test_selenium_new_post_ictv(driver, str(0))
+test_selenium_new_post_ictv(driver, str(1))
+test_selenium_moderate_publishing(driver)
 test_selenium_moderate_publishing(driver)
 test_selenium_delete_channel(driver)
 test_selenium_logout(driver)
