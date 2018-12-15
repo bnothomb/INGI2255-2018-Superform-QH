@@ -38,7 +38,7 @@ before_script:
   - (python superform/__init__.py &) && sleep 10
 script:
   - py.test -ra --ignore=superform/tests/test_linkedin.py --ignore=superform/tests/test_facebook.py --cov-config ../.coveragerc --cov=superform
-  - python superform/selenium/test_selenium_ictv.py
+  - xvfb-run python superform/selenium/test_selenium_ictv.py
 after_success:
   - coveralls
   
