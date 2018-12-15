@@ -20,16 +20,14 @@ ictv_template = "text-image"
 comfort_delay = 0.3
 waiting_delay = 1
 
+driver = None
 
-@pytest.fixture(scope="session")
-def driver_get(request):
-    web_driver = webdriver.Firefox()
-    session = request.node
-    for item in session.items:
-        cls = item.getparent(pytest.Class)
-        setattr(cls.obj,"driver",web_driver)
-    yield
-    web_driver.close()
+@pytest.fixture(scope="function")
+def driver(request):
+    if driver == None:
+        driver = webdriver.Firefox()
+        yield driver
+        web_driver.close()
 
 """
 @pytest.fixture
@@ -47,7 +45,7 @@ def client():
     driver.close()
 """
 
-def test_selenium_open_superform():
+def test_selenium_open_superform(driver):
     driver.get("https://0.0.0.0:5000")
     assert "Superform" in driver.title
 
