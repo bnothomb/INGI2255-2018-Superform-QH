@@ -4,6 +4,8 @@ import time
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
 
+import pytest
+
 channel_name = "A-beautiful-channel-name"
 channel_server_fqdn = "0.0.0.0:8000"
 channel_ictv_id = "1"
@@ -19,8 +21,34 @@ comfort_delay = 0.3
 waiting_delay = 1
 
 
-def test_selenium_open_superform(driver):
-    driver.get("http://localhost:5000")
+@pytest.fixture(scope="session")
+def driver_get(request):
+    web_driver = webdriver.Firefox()
+    session = request.node
+    for item in session.items:
+        cls = item.getparent(pytest.Class)
+        setattr(cls.obj,"driver",web_driver)
+    yield
+    web_driver.close()
+
+"""
+@pytest.fixture
+def client():
+    driver = webdriver.Firefox()
+    test_selenium_open_superform(driver)
+    test_selenium_auth(driver)
+    test_selenium_new_ictv_channel(driver)
+    test_selenium_conf_ictv_channel(driver)
+    test_selenium_add_moderator(driver)
+    test_selenium_new_post_ictv(driver)
+    test_selenium_moderate_publishing(driver)
+    test_selenium_delete_channel(driver)
+    test_selenium_logout(driver)
+    driver.close()
+"""
+
+def test_selenium_open_superform():
+    driver.get("https://0.0.0.0:5000")
     assert "Superform" in driver.title
 
 
@@ -209,15 +237,3 @@ def test_selenium_logout(driver):
     time.sleep(comfort_delay)
     assert "You are not logged in." in driver.page_source
 
-
-driver = webdriver.Firefox()
-test_selenium_open_superform(driver)
-"""test_selenium_auth(driver)
-test_selenium_new_ictv_channel(driver)
-test_selenium_conf_ictv_channel(driver)
-test_selenium_add_moderator(driver)
-test_selenium_new_post_ictv(driver)
-test_selenium_moderate_publishing(driver)
-test_selenium_delete_channel(driver)
-test_selenium_logout(driver)"""
-driver.close()
