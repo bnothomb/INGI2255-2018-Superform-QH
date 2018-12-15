@@ -35,10 +35,10 @@ before_script:
   - python superform/tests/ictv-server/server-setup.py
   - cp superform/config.test.json superform/config.json
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
-  - (python superform/__init__.py &) && sleep 10
+  - (python superform/__init__.py &) && sleep 5
 script:
   - py.test -ra --ignore=superform/tests/test_linkedin.py --ignore=superform/tests/test_facebook.py --cov-config ../.coveragerc --cov=superform
-  - xvfb-run python superform/selenium/test_selenium_ictv.py
+  -  xvfb-run --server-args="-screen 0 1024x768x24" python superform/selenium/test_selenium_ictv.py
 after_success:
   - coveralls
   
