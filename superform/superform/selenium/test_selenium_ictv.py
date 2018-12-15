@@ -20,14 +20,15 @@ ictv_template = "text-image"
 comfort_delay = 0.3
 waiting_delay = 1
 
-driver = None
+
+def pytest_namespace():
+    return {'driver': None}
 
 @pytest.fixture(scope="function")
 def driver(request):
-    global driver
-    if driver == None:
-        driver = webdriver.Firefox()
-        yield driver
+    if pytest.driver == None:
+        pytest.driver = webdriver.Firefox()
+        yield pytest.driver
         web_driver.close()
 
 """
