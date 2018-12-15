@@ -234,3 +234,7 @@ def test_selenium_ictv():
     test_selenium_logout(driver)
     driver.close()
 
+
+if __name__ == '__main__':
+    test_selenium_ictv()
+
