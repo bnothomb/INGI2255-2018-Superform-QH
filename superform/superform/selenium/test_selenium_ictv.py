@@ -15,7 +15,7 @@ def test_selenium_ictv():
     post_publication_until = datetime.date.today() + datetime.timedelta(1)
     ictv_template = "text-image"
     comfort_delay = 0.5
-    waiting_delay = 1
+    waiting_delay = 2.5
 
     def test_selenium_open_superform(driver):
         try:
