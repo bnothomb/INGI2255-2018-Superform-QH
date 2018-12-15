@@ -10,7 +10,7 @@ before_install:
 env:
   - MOZ_HEADLESS=1
 addons:
-  - firefox: latest
+  firefox: latest
 # command to install dependencies
 install:
   - pip install Flask
@@ -23,19 +23,20 @@ install:
 before_script: 
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz
   - tar -xf geckodriver-v0.23.0-linux64.tar.gz
-  - export PATH=$PATH:/home/travis/build/bnothomb/INGI2255-2018-Superform-QH/
+  - export PATH=$PATH:$(pwd)
   - echo $PATH
   # configure ictv
   - cd superform/
-  - cat superform/tests/ictv-server/hack1.py >> /home/travis/virtualenv/python3.6.3/lib/python3.6/site-packages/ictv/pages/channel_page.py
+  - cat superform/tests/ictv-server/hack1.py >> /home/travis/virtualenv/python3.6.3/lib/python3.6/site-packages/ictv/pages/channels_page.py
   - cat superform/tests/ictv-server/hack2.py >> /home/travis/virtualenv/python3.6.3/lib/python3.6/site-packages/ictv/app.py
   - ictv-setup-database --config superform/tests/ictv-server/ictv_config.yaml
     # ugly hack but otherwise the server is not up when the tests are launched
   - (ictv-webapp 0.0.0.0:8000 --config superform/tests/ictv-server/ictv_config.yaml &) && sleep 5
   - python superform/tests/ictv-server/server-setup.py
-script:
   - cp superform/config.test.json superform/config.json
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
+  - (python superform/__init__.py &) && sleep 10
+script:
   - py.test -ra --ignore=superform/tests/test_linkedin.py --ignore=superform/tests/test_facebook.py --cov-config ../.coveragerc --cov=superform
 after_success:
   - coveralls
