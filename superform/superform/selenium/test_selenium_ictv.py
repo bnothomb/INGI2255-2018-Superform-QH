@@ -236,4 +236,3 @@ def test_selenium_logout(driver):
     logout_link.click()
     time.sleep(comfort_delay)
     assert "You are not logged in." in driver.page_source
-
