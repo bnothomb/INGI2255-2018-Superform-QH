@@ -24,6 +24,7 @@ driver = None
 
 @pytest.fixture(scope="function")
 def driver(request):
+    global driver
     if driver == None:
         driver = webdriver.Firefox()
         yield driver
